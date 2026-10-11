@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 class FilteredProvider extends ChangeNotifier {
   List<dynamic> _allData = [];
   List<dynamic> _filteredData = [];
+  String _selectedCategory = "All";
 
   // methode to get all data from providers
   Future<void> getAllData(BuildContext context) async {
@@ -52,4 +53,27 @@ class FilteredProvider extends ChangeNotifier {
 
   // method to get filtered data
   List<dynamic> get filteredData => _filteredData;
+
+  // method to filter data
+  // here category means the type of filtered data
+  void filterDataIntoType(String category) {
+    _selectedCategory = category;
+
+    if (category == "All") {
+      _filteredData = _allData;
+    } else if (category == "Mindfulness") {
+      _filteredData = _allData.whereType<MindfulnessExercise>().toList();
+    } else if (category == "Meditation") {
+      _filteredData = _allData.whereType<MeditationExercise>().toList();
+    } else if (category == "Sleep Stories") {
+      _filteredData = _allData.whereType<SleepExercise>().toList();
+    }
+
+    notifyListeners();
+  }
+
+  // get selected category
+  String getSelectedCategory() {
+    return _selectedCategory;
+  }
 }
