@@ -14,7 +14,7 @@ class FilteredProvider extends ChangeNotifier {
   // methode to get all data from providers
   Future<void> getAllData(BuildContext context) async {
     // ensures this runs after build
-    await Future.delayed(Duration.zero);
+    // await Future.delayed(Duration.zero);
 
     // mindfull exercises
     final List<MindfulnessExercise> mindfullExercises =
@@ -49,4 +49,7 @@ class FilteredProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  // method to get filtered data
+  List<dynamic> get filteredData => _filteredData;
 }
