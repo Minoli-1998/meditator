@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:meditator/models/mindfull_exercise_model.dart';
 import 'package:meditator/providers/mindfull_exercise_provider.dart';
+import 'package:meditator/router/route_names.dart';
 import 'package:meditator/utils/colors.dart';
 import 'package:meditator/utils/text_styles.dart';
 import 'package:provider/provider.dart';
@@ -81,41 +85,56 @@ class MindfullExercisePage extends StatelessWidget {
                                 MindfulnessExercise exercise = mindfulProvider
                                     .getAllData()[index];
 
-                                return Container(
-                                  margin: EdgeInsets.only(bottom: 15),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primaryDarkBlue.withValues(
-                                      alpha: 0.1,
+                                return GestureDetector(
+                                  onTap: () {
+                                    GoRouter.of(context).pushNamed(
+                                      AppRouteNames.mindfulExercise,
+                                      queryParameters: {
+                                        "mindfullExercises": json.encode(
+                                          exercise.toJSON(),
+                                        ),
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(bottom: 15),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primaryDarkBlue
+                                          .withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: ListTile(
-                                    contentPadding: EdgeInsets.all(10),
-                                    leading: ClipRRect(
-                                      borderRadius:
-                                          BorderRadiusGeometry.circular(100),
-                                      child: Image.asset(
-                                        exercise.imagePath,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                            0.13,
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                            0.13,
+                                    child: ListTile(
+                                      contentPadding: EdgeInsets.all(10),
+                                      leading: ClipRRect(
+                                        borderRadius:
+                                            BorderRadiusGeometry.circular(100),
+                                        child: Image.asset(
+                                          exercise.imagePath,
+                                          width:
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.13,
+                                          height:
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.13,
+                                        ),
                                       ),
-                                    ),
 
-                                    title: Text(
-                                      exercise.name,
-                                      style: AppTextStyles.subtitleStyle,
-                                    ),
+                                      title: Text(
+                                        exercise.name,
+                                        style: AppTextStyles.subtitleStyle,
+                                      ),
 
-                                    subtitle: Text(
-                                      exercise.description,
-                                      style: AppTextStyles.bodyStyle,
-                                      textAlign: TextAlign.left,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
+                                      subtitle: Text(
+                                        exercise.description,
+                                        style: AppTextStyles.bodyStyle,
+                                        textAlign: TextAlign.left,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
                                   ),
                                 );
