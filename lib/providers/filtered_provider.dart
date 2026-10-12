@@ -15,11 +15,12 @@ class FilteredProvider extends ChangeNotifier {
   // methode to get all data from providers
   Future<void> getAllData(BuildContext context) async {
     // ensures this runs after build
-    // await Future.delayed(Duration.zero);
+    await Future.delayed(Duration.zero);
 
     // mindfull exercises
     final List<MindfulnessExercise> mindfullExercises =
         Provider.of<MindfullExerciseProvider>(
+          // ignore: use_build_context_synchronously
           context,
           listen: false,
         ).mindfullExercies;
@@ -27,6 +28,7 @@ class FilteredProvider extends ChangeNotifier {
     // meditation exercises
     final List<MeditationExercise> meditationExercises =
         Provider.of<MeditationProvider>(
+          // ignore: use_build_context_synchronously
           context,
           listen: false,
         ).meditationExercies;
@@ -34,6 +36,7 @@ class FilteredProvider extends ChangeNotifier {
     // sleep stories exercises
     final List<SleepExercise> sleepExercises =
         Provider.of<SleepExerciseProvider>(
+          // ignore: use_build_context_synchronously
           context,
           listen: false,
         ).sleepExercies;
