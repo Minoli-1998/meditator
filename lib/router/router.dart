@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:go_router/go_router.dart';
 import 'package:meditator/models/functions_data_model.dart';
 import 'package:meditator/models/mindfull_exercise_model.dart';
+import 'package:meditator/models/sleep_exercise_model.dart';
 import 'package:meditator/pages/functions_page.dart';
 import 'package:meditator/pages/main_screen.dart';
 import 'package:meditator/pages/mindful_exercise_details_page.dart';
 import 'package:meditator/pages/mindful_exercise_timer.dart';
+import 'package:meditator/pages/sleep_exercise_timer.dart';
 import 'package:meditator/router/route_names.dart';
 
 class AppRouter {
@@ -60,6 +62,16 @@ class AppRouter {
             json.decode(mindfulExerciseJson!),
           );
           return MindfulExerciseTimer(exercise: exercise);
+        },
+      ),
+
+      // Sleep exercise timer
+      GoRoute(
+        path: '/sleepExerciseTimer',
+        name: AppRouteNames.sleepExerciseTimer,
+        builder: (context, state) {
+          SleepExercise sleepExercise = state.extra as SleepExercise;
+          return SleepExerciseTimer(sleepExercise: sleepExercise);
         },
       ),
     ],

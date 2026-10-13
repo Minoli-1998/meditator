@@ -50,8 +50,11 @@ class HomePage extends StatelessWidget {
   }
 
   // handle sleep stories exercises pressed
-  void handleSleepStoriesExercisePressed() {
-    print("Sleep");
+  void handleSleepStoriesExercisePressed(
+    BuildContext context,
+    SleepExercise data,
+  ) {
+    GoRouter.of(context).push('/sleepExerciseTimer', extra: data);
   }
 
   @override
@@ -295,7 +298,10 @@ class HomePage extends StatelessWidget {
                                     data.videoUrl,
                                   );
                                 } else if (data is SleepExercise) {
-                                  handleSleepStoriesExercisePressed();
+                                  handleSleepStoriesExercisePressed(
+                                    context,
+                                    data,
+                                  );
                                 }
                               },
                               child: Container(
