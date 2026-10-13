@@ -2,13 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:meditator/models/meditation_exercise_model.dart';
 import 'package:meditator/models/mindfull_exercise_model.dart';
+import 'package:meditator/models/sleep_exercise_model.dart';
 import 'package:meditator/providers/filtered_provider.dart';
 import 'package:meditator/utils/colors.dart';
 import 'package:meditator/utils/text_styles.dart';
+import 'package:meditator/widgets/meditation_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
+  // handle mindfulness exercises pressed
+  void handleMindfulExercisePressed() {
+    print("Mindfulness exersice");
+  }
+
+  // handle meditation exercises pressed
+  void handleMeditationExercisePressed(
+    BuildContext context,
+    String name,
+    String category,
+    String description,
+    int duration,
+    String videoUrl,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return MeditationBottomSheet(
+          name: name,
+          category: category,
+          description: description,
+          duration: duration,
+          url: videoUrl,
+        );
+      },
+    );
+  }
+
+  // handle sleep stories exercises pressed
+  void handleSleepStoriesExercisePressed() {
+    print("Sleep");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +273,22 @@ class HomePage extends StatelessWidget {
                           mainAxisSpacing: 10,
                           children: completedData.map((data) {
                             return GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                if (data is MindfulnessExercise) {
+                                  handleMindfulExercisePressed();
+                                } else if (data is MeditationExercise) {
+                                  handleMeditationExercisePressed(
+                                    context,
+                                    data.name,
+                                    data.category,
+                                    data.description,
+                                    data.duration,
+                                    data.videoUrl,
+                                  );
+                                } else if (data is SleepExercise) {
+                                  handleSleepStoriesExercisePressed();
+                                }
+                              },
                               child: Container(
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
