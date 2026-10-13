@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:go_router/go_router.dart';
 import 'package:meditator/models/meditation_exercise_model.dart';
 import 'package:meditator/models/mindfull_exercise_model.dart';
 import 'package:meditator/models/sleep_exercise_model.dart';
@@ -13,8 +16,14 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   // handle mindfulness exercises pressed
-  void handleMindfulExercisePressed() {
-    print("Mindfulness exersice");
+  void handleMindfulExercisePressed(
+    BuildContext context,
+    MindfulnessExercise exercise,
+  ) {
+    GoRouter.of(context).pushNamed(
+      '/mindfulExerciseTimer',
+      queryParameters: {"mindfulExercise": json.encode(exercise.toJSON())},
+    );
   }
 
   // handle meditation exercises pressed
@@ -275,7 +284,7 @@ class HomePage extends StatelessWidget {
                             return GestureDetector(
                               onTap: () {
                                 if (data is MindfulnessExercise) {
-                                  handleMindfulExercisePressed();
+                                  handleMindfulExercisePressed(context, data);
                                 } else if (data is MeditationExercise) {
                                   handleMeditationExercisePressed(
                                     context,
