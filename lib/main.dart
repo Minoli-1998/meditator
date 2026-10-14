@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:meditator/models/meditation_exercise_model.dart';
+import 'package:meditator/models/mindfull_exercise_model.dart';
+import 'package:meditator/models/sleep_exercise_model.dart';
 import 'package:meditator/providers/filtered_provider.dart';
 import 'package:meditator/providers/meditation_provider.dart';
 import 'package:meditator/providers/mindfull_exercise_provider.dart';
@@ -7,7 +11,20 @@ import 'package:meditator/providers/sleep_exercise_provider.dart';
 import 'package:meditator/router/router.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  // hive initialization
+  await Hive.initFlutter();
+
+  // register adapters
+  Hive.registerAdapter(MeditationExerciseAdapter());
+  Hive.registerAdapter(MindfulnessExerciseAdapter());
+  Hive.registerAdapter(SleepExerciseAdapter());
+
+  // creating boxes for data
+  await Hive.openBox('meditation_data');
+  await Hive.openBox('mindfulness_data');
+  await Hive.openBox('sleep_data');
+
   runApp(
     MultiProvider(
       providers: [
