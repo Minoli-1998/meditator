@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:meditator/models/meditation_exercise_model.dart';
+import 'package:meditator/providers/custom_data_provider.dart';
 import 'package:meditator/utils/colors.dart';
 import 'package:meditator/widgets/form_text_field_input.dart';
+import 'package:provider/provider.dart';
 
 class MeditationForm extends StatefulWidget {
   const MeditationForm({super.key});
@@ -66,7 +69,7 @@ class _MeditationFormState extends State<MeditationForm> {
                 keyboardType: TextInputType.text,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Please enter category";
+                    return "Please enter name";
                   }
                   return null;
                 },
@@ -107,7 +110,7 @@ class _MeditationFormState extends State<MeditationForm> {
                   return null;
                 },
                 onSaved: (newValue) {
-                  _duration = newValue! as int;
+                  _duration = int.parse(newValue!);
                 },
               ),
 
@@ -155,9 +158,30 @@ class _MeditationFormState extends State<MeditationForm> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        // save values in local storage
+                        _formKey.currentState?.save();
+
+                        final meditation = MeditationExercise(
+                          category: _category,
+                          name: _name,
+                          description: _description,
+                          duration: _duration,
+                          audioUrl: _audioUrl,
+                          videoUrl: _videoUrl,
+                        );
+
+                        Provider.of<CustomDataProvider>(
+                          context,
+                          listen: false,
+                        ).addMeditation(meditation, context);
 
                         // clear fields
+                        _formKey.currentState?.reset();
+                        _category = "";
+                        _name = "";
+                        _description = "";
+                        _duration = 0;
+                        _audioUrl = "";
+                        _videoUrl = "";
                       }
                     },
                     style: ButtonStyle(
