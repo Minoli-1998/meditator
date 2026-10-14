@@ -165,7 +165,13 @@ class _MeditationFormState extends State<MeditationForm> {
                         AppColors.primaryGreen,
                       ),
                     ),
-                    child: Text("Submit", style: TextStyle(fontSize: 16)),
+                    child: Text(
+                      "Submit",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: AppColors.primaryBlack,
+                      ),
+                    ),
                   ),
                 ],
               ),

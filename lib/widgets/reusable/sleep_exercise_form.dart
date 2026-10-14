@@ -146,7 +146,13 @@ class _SleepExerciseFormState extends State<SleepExerciseForm> {
                         AppColors.primaryGreen,
                       ),
                     ),
-                    child: Text("Submit", style: TextStyle(fontSize: 16)),
+                    child: Text(
+                      "Submit",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: AppColors.primaryBlack,
+                      ),
+                    ),
                   ),
                 ],
               ),
