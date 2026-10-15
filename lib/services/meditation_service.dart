@@ -54,4 +54,81 @@ class MeditationService {
       }
     }
   }
+
+  // method to get meditation data
+  List<MeditationExercise> getAllMeditations() {
+    try {
+      // get all exercises from the box
+      final dynamic allExercisesJson = meditationBox.get('meditation_data');
+
+      if (allExercisesJson != null && allExercisesJson is List) {
+        return allExercisesJson.map((meditation) {
+          if (meditation is Map<String, dynamic>) {
+            return MeditationExercise.fromJson(meditation);
+          } else {
+            return MeditationExercise.fromJson(
+              Map<String, dynamic>.from(meditation),
+            );
+          }
+        }).toList();
+      } else {
+        return [];
+      }
+    } catch (error) {
+      print(error);
+      return [];
+    }
+  }
+
+  // method to delete an exercise
+  Future<void> deleteMeditation(
+    MeditationExercise meditationExercise,
+    BuildContext context,
+  ) async {
+    try {
+      // get all exercises from storage
+      final allExercisesJson = meditationBox.get('meditation_data');
+      List<Map<String, dynamic>> exercises = [];
+
+      if (allExercisesJson != null && allExercisesJson is List) {
+        exercises = List<Map<String, dynamic>>.from(
+          allExercisesJson.map((meditation) {
+            return Map<String, dynamic>.from(meditation);
+          }),
+        );
+
+        // remove the exercise from the list
+        exercises.removeWhere((meditation) {
+          MeditationExercise currentexercise = MeditationExercise.fromJson(
+            Map<String, dynamic>.from(meditation),
+          );
+
+          return currentexercise.name == meditationExercise.name &&
+              currentexercise.category == meditationExercise.category;
+        });
+
+        // save the updated list in box
+        await meditationBox.put('meditation_data', exercises);
+
+        // display a message
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Exercise deleted"),
+              duration: Duration(seconds: 1),
+            ),
+          );
+        }
+      }
+    } catch (error) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error in deleting exercise"),
+            duration: Duration(seconds: 1),
+          ),
+        );
+      }
+    }
+  }
 }
