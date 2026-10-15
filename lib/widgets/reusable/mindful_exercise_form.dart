@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:meditator/models/mindfull_exercise_model.dart';
+import 'package:meditator/providers/custom_data_provider.dart';
 import 'package:meditator/utils/colors.dart';
 import 'package:meditator/widgets/form_text_field_input.dart';
+import 'package:provider/provider.dart';
 
 class MindfulnessForm extends StatefulWidget {
   const MindfulnessForm({super.key});
@@ -28,14 +31,28 @@ class _MindfulnessFormState extends State<MindfulnessForm> {
   final ImagePicker _imagePicker = ImagePicker();
 
   // method to pick the image
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedImage = await _imagePicker.pickImage(source: source);
+  // Future<void> _pickImage(ImageSource source) async {
+  //   final pickedImage = await _imagePicker.pickImage(source: source);
 
-    setState(() {
-      if (pickedImage != null) {
-        _imagePath = File(pickedImage.path);
+  //   setState(() {
+  //     if (pickedImage != null) {
+  //       _imagePath = File(pickedImage.path);
+  //     }
+  //   });
+  // }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final XFile? pickedImage = await _imagePicker.pickImage(source: source);
+
+      if (pickedImage != null && mounted) {
+        setState(() {
+          _imagePath = File(pickedImage.path);
+        });
       }
-    });
+    } catch (e) {
+      debugPrint('Error picking image: $e');
+    }
   }
 
   @override
@@ -59,7 +76,21 @@ class _MindfulnessFormState extends State<MindfulnessForm> {
           child: Column(
             children: [
               // displaying selected image
-              if (_imagePath != null) Image.file(_imagePath!, height: 100),
+              // if (_imagePath != null) Image.file(_imagePath!, height: 100),
+              if (_imagePath != null) ...[
+                Center(
+                  child: Image.file(
+                    _imagePath!,
+                    height: 150,
+                    width: 150,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Text('Unable to display selected image');
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+              ],
 
               // buttons
               Row(
@@ -163,7 +194,7 @@ class _MindfulnessFormState extends State<MindfulnessForm> {
                   return null;
                 },
                 onSaved: (newValue) {
-                  _duration = newValue! as int;
+                  _duration = int.parse(newValue!);
                 },
               ),
 
@@ -193,9 +224,35 @@ class _MindfulnessFormState extends State<MindfulnessForm> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        // save values in local storage
+                        _formKey.currentState!.save();
 
-                        // clear fields
+                        final imagePathString = _imagePath?.path ?? "";
+
+                        // getting user enter data
+                        final mindfulnessExercise = MindfulnessExercise(
+                          category: _category,
+                          name: _name,
+                          description: _description,
+                          instructionUrl: _instructionUrl,
+                          imagePath: imagePathString,
+                          instructions: _instructions,
+                          duration: _duration,
+                        );
+
+                        // clear data
+                        _formKey.currentState!.reset();
+                        _category = "";
+                        _name = "";
+                        _description = "";
+                        _instructionUrl = "";
+                        _instructions = [];
+                        _duration = 0;
+                        _imagePath = null;
+
+                        Provider.of<CustomDataProvider>(
+                          context,
+                          listen: false,
+                        ).addMindfulnessExercise(mindfulnessExercise, context);
                       }
                     },
                     style: ButtonStyle(
