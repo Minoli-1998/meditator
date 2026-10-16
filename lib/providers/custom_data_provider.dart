@@ -17,6 +17,7 @@ class CustomDataProvider extends ChangeNotifier {
   List<MindfulnessExercise> get allMindfulnessExercises =>
       _mindfulnessExercises;
 
+  // --- ADD ---
   // method to add new meditaion
   void addMeditation(MeditationExercise meditation, BuildContext context) {
     try {
@@ -69,6 +70,102 @@ class CustomDataProvider extends ChangeNotifier {
         MindfulExerciseService().addMindfullExercise(exercise, context);
       } catch (error) {
         print("Error local storage provider : $error");
+      }
+
+      notifyListeners();
+    } catch (error) {
+      print("Provider error : $error");
+    }
+  }
+
+  // --- GET ---
+  // method to get meditations exercises
+  List<MeditationExercise> getMeditationExersices() {
+    try {
+      final meditationExersices = MeditationService().getAllMeditations();
+
+      return meditationExersices;
+    } catch (error) {
+      print("Provider error : $error");
+      return [];
+    }
+  }
+
+  // method to get mindfulness exercises
+  List<MindfulnessExercise> getMindfulnessExercises() {
+    try {
+      final mindfulnessExersices = MindfulExerciseService()
+          .getMindfulnessExercises();
+      return mindfulnessExersices;
+    } catch (error) {
+      print("Provider error : $error");
+      return [];
+    }
+  }
+
+  // method to get sleep exercises
+  List<SleepExercise> getSleepExercises() {
+    try {
+      final sleepExersices = SleepExerciseService().getAllSleepExercises();
+      return sleepExersices;
+    } catch (error) {
+      print("Provider error : $error");
+      return [];
+    }
+  }
+
+  // --- DELETE ---
+  // delete meditation exersice
+  void deleteMeditation(MeditationExercise meditation, BuildContext context) {
+    try {
+      // remove from the list in provider
+      _meditations.remove(meditation);
+
+      // remove from local storage
+      try {
+        MeditationService().deleteMeditation(meditation, context);
+      } catch (error) {
+        print("Provider delete service error : $error");
+      }
+
+      notifyListeners();
+    } catch (error) {
+      print("Provider error : $error");
+    }
+  }
+
+  // delete mindfulness exersice
+  void deleteMindfulness(
+    MindfulnessExercise mindfulness,
+    BuildContext context,
+  ) {
+    try {
+      _mindfulnessExercises.remove(mindfulness);
+
+      try {
+        MindfulExerciseService().deleteMindfulnessExersice(
+          mindfulness,
+          context,
+        );
+      } catch (error) {
+        print("Provider local storage deletion error : $error");
+      }
+
+      notifyListeners();
+    } catch (error) {
+      print("Provider error : $error");
+    }
+  }
+
+  // delete sleep exercise
+  void deleteSleepExersice(SleepExercise sleepExercise, BuildContext context) {
+    try {
+      _sleepexercises.remove(sleepExercise);
+
+      try {
+        SleepExerciseService().deleteSleepExersice(sleepExercise, context);
+      } catch (error) {
+        print("Provider local storage deletion error : $error");
       }
 
       notifyListeners();
