@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:meditator/utils/colors.dart';
 import 'package:meditator/widgets/tabs/meditation_tab.dart';
 import 'package:meditator/widgets/tabs/mindfull_exercise_tab.dart';
 import 'package:meditator/widgets/tabs/sleep_exercise_tab.dart';
@@ -20,6 +22,13 @@ class CustomExercisePage extends StatelessWidget {
               Tab(text: "Mindfull Exercises"),
             ],
           ),
+        ),
+
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            GoRouter.of(context).push('/createCustomExercise');
+          },
+          child: Icon(Icons.add, color: AppColors.primaryDarkBlue),
         ),
 
         body: TabBarView(

@@ -18,10 +18,10 @@ class _MainScreenState extends State<MainScreen> {
   int _pageIndex = 0;
 
   static const List<Widget> _pages = [
-    CustomExercisePage(),
     HomePage(),
     MindfullExercisePage(),
     CreateCustomExercisePage(),
+    CustomExercisePage(),
     ProfilePage(),
   ];
 
