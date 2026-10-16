@@ -7,7 +7,6 @@ import 'package:meditator/models/sleep_exercise_model.dart';
 import 'package:meditator/pages/functions_page.dart';
 import 'package:meditator/pages/main_screen.dart';
 import 'package:meditator/pages/main_screens/create_custom_exercise_page.dart';
-import 'package:meditator/pages/main_screens/custom_exercise_page.dart';
 import 'package:meditator/pages/mindful_exercise_details_page.dart';
 import 'package:meditator/pages/mindful_exercise_timer.dart';
 import 'package:meditator/pages/sleep_exercise_timer.dart';
